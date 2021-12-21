@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>index</h1>
-	
+	<%@ include file="header.jsp" %>
+	<h1>${msg}</h1>
 </body>
 </html>
