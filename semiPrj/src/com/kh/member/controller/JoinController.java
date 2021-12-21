@@ -13,7 +13,6 @@ import com.kh.member.model.vo.MemberVo;
 
 @WebServlet("/join")
 public class JoinController extends HttpServlet {
-	
 	//회원가입 화면 보여주기
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -23,6 +22,7 @@ public class JoinController extends HttpServlet {
 	//회원가입 진행
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setCharacterEncoding("UTF-8");
 		String id = req.getParameter("id");
 		String pwd = req.getParameter("pwd");
 		String name = req.getParameter("name");

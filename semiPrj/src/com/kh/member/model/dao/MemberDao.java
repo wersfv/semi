@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.kh.member.model.vo.MemberVo;
 
@@ -76,6 +78,50 @@ public class MemberDao {
 		
 		
 		return selectedMember;
+	}
+
+	public List<MemberVo> selectMemberAll(Connection conn) {
+		List<MemberVo> memberList = new ArrayList<MemberVo>();
+		String sql = "SELECT * FROM MEMBER WHERE QUIT_YN = 'N' AND OPEN_YN = 'Y'";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				int memberNo = rs.getInt("MEMBER_NO");
+				String id = rs.getString("ID");
+				String pwd = rs.getString("PWD");
+				String name = rs.getString("NAME");
+				int detail = rs.getInt("DETAIL");
+				Timestamp enrollDate = rs.getTimestamp("ENROLL_DATE");
+				Timestamp modifyDate = rs.getTimestamp("MODIFY_DATE");
+				String openYn = rs.getString("OPEN_YN");
+				MemberVo selectedMember = new MemberVo();
+				selectedMember.setMeberNo(memberNo);
+				selectedMember.setId(id);
+				selectedMember.setPwd(pwd);
+				selectedMember.setName(name);
+				selectedMember.setDetail(detail);
+				selectedMember.setEnrollDate(enrollDate);
+				selectedMember.setModifyDate(modifyDate);
+				selectedMember.setOpenYn(openYn);
+				memberList.add(selectedMember);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			close(pstmt);
+			close(rs);
+		} finally {
+			close(pstmt);
+			close(rs);
+		}
+		
+		
+		return memberList;
 	}
 
 }
