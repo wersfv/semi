@@ -3,7 +3,7 @@ package com.kh.member.model.vo;
 import java.sql.Timestamp;
 
 public class MemberVo {
-	private int meberNo;
+	private int memberNo;
 	private String id;
 	private String pwd;
 	private String name;
@@ -13,11 +13,11 @@ public class MemberVo {
 	private String openYn;
 	
 	
-	public int getMeberNo() {
-		return meberNo;
+	public int getMemberNo() {
+		return memberNo;
 	}
-	public void setMeberNo(int meberNo) {
-		this.meberNo = meberNo;
+	public void setMemberNo(int meberNo) {
+		this.memberNo = meberNo;
 	}
 	public int getDetail() {
 		return detail;

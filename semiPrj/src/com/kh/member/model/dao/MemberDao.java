@@ -56,7 +56,7 @@ public class MemberDao {
 				Timestamp modifyDate = rs.getTimestamp("MODIFY_DATE");
 				String openYn = rs.getString("OPEN_YN");
 				selectedMember = new MemberVo();
-				selectedMember.setMeberNo(memberNo);
+				selectedMember.setMemberNo(memberNo);
 				selectedMember.setId(id);
 				selectedMember.setPwd(pwd);
 				selectedMember.setName(name);
@@ -100,7 +100,7 @@ public class MemberDao {
 				Timestamp modifyDate = rs.getTimestamp("MODIFY_DATE");
 				String openYn = rs.getString("OPEN_YN");
 				MemberVo selectedMember = new MemberVo();
-				selectedMember.setMeberNo(memberNo);
+				selectedMember.setMemberNo(memberNo);
 				selectedMember.setId(id);
 				selectedMember.setPwd(pwd);
 				selectedMember.setName(name);
@@ -115,6 +115,75 @@ public class MemberDao {
 			e.printStackTrace();
 			close(pstmt);
 			close(rs);
+		} finally {
+			close(pstmt);
+			close(rs);
+		}
+		
+		
+		return memberList;
+	}
+	
+	public int selectMemberById(Connection conn, String id) {
+		
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		int result = 0;
+		String sql = "SELECT COUNT(*) FROM MEMBER WHERE ID = ?";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			rs = pstmt.executeQuery();
+			rs.next();
+			result = rs.getInt(1);
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+			close(rs);
+		}
+		
+		return result;
+	}
+
+	public List<MemberVo> selectMemberBySearch(Connection conn, String type, String value) {
+		List<MemberVo> memberList = new ArrayList<MemberVo>();
+		MemberVo selectedMember = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM MEMBER WHERE %s LIKE ?";
+		sql = String.format(sql, type);
+
+		try {
+			pstmt = conn.prepareStatement(sql);
+			String values = '%' + value + '%';
+			pstmt.setString(1, values);
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				int memberNo = rs.getInt("MEMBER_NO");
+				String id = rs.getString("ID");
+				String pwd = rs.getString("PWD");
+				String name = rs.getString("NAME");
+				int detail = rs.getInt("DETAIL");
+				Timestamp enrollDate = rs.getTimestamp("ENROLL_DATE");
+				Timestamp modifyDate = rs.getTimestamp("MODIFY_DATE");
+				String openYn = rs.getString("OPEN_YN");
+				selectedMember = new MemberVo();
+				selectedMember.setMemberNo(memberNo);
+				selectedMember.setId(id);
+				selectedMember.setPwd(pwd);
+				selectedMember.setName(name);
+				selectedMember.setDetail(detail);
+				selectedMember.setEnrollDate(enrollDate);
+				selectedMember.setModifyDate(modifyDate);
+				selectedMember.setOpenYn(openYn);
+				memberList.add(selectedMember);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
 		} finally {
 			close(pstmt);
 			close(rs);

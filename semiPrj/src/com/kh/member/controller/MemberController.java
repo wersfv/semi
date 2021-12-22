@@ -18,8 +18,12 @@ public class MemberController extends HttpServlet {
 	// 화면 보여주기
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String type = req.getParameter("searchType");
+		String value = req.getParameter("searchValue");
+		String cureentPage = req.getParameter("currentPage");
 		
-		List<MemberVo> memberList = new MemberService().search();
+		List<MemberVo> memberList = new MemberService().search(type, value);
+		
 		req.setAttribute("memberList", memberList);
 		req.getRequestDispatcher("/WEB-INF/views/member/searchAllUser.jsp").forward(req, resp);
 	}
